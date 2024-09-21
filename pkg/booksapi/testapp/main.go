@@ -1,5 +1,6 @@
 package main
 
+// BFT for one of the API endpoints
 import (
 	"bufio"
 	"fmt"
