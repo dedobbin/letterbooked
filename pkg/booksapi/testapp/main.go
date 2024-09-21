@@ -18,7 +18,7 @@ func main() {
 		buff = scanner.Text()
 	}
 
-	query, err := booksapi.QueryTitle(buff)
+	query, err := booksapi.QueryTitle(buff, -1)
 	if err != nil {
 		fmt.Println("Query failed!", err)
 		os.Exit(1)

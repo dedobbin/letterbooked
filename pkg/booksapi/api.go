@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // Helper function to pull from a URL and deserialize into JSON, your mileage may vary
@@ -28,11 +29,14 @@ func pullFromUrl[T any](url string, v *T) (T, error) {
 	return *v, err
 }
 
-// Basic stupid query to get a title, no other params set
-func QueryTitle(title string) (result BookQueryResult, err error) {
+// Basic stupid query to get a title, also n many results (limit<1 gets all results)
+func QueryTitle(title string, limit int) (result BookQueryResult, err error) {
 	log.Println("Sending query for title:", title, "to Archive open Library API")
 	params := url.Values{}
 	params.Add("q", url.QueryEscape(title))
+	if limit >= 1 {
+		params.Add("limit", strconv.Itoa(limit))
+	}
 
 	queryUrl := "https://openlibrary.org/search.json?" + params.Encode()
 	log.Println("Query string generated:", queryUrl)
