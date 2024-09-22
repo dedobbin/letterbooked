@@ -3,18 +3,19 @@ package booksapi
 import (
     "fmt"
     "net/http"
-	"os"
 )
 
 func handler (w http.ResponseWriter, r *http.Request){
 	query, err := QueryTitle("salo", -1)
+	var content string
 	if err != nil {
-		fmt.Println("Query failed!", err)
-		os.Exit(1)
+		content = "error";
+		
+	} else {
+		content = query.Docs[3].Title;
 	}
-
 	w.Header().Set("Content-Type", "text/html");
-	fmt.Fprintf(w, "<h1>%s</h1>", query.Docs[3].Title);
+	fmt.Fprintf(w, "<h1>books</h1>%s", content);
 }
 
 func Start_server(){
