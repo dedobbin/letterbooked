@@ -2,28 +2,39 @@ package main
 
 // BFT for one of the API endpoints
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"html/template"
+	"net/http"
+	"net/url"
+	"path/filepath"
 
 	"github.com/dedobbin/letterbooked/pkg/booksapi"
 )
 
+type PageData struct {
+	Author booksapi.Author
+	Books  []booksapi.Document
+}
+
 func main() {
-	fmt.Print("Enter a book name: ")
-	var buff string
-	scanner := bufio.NewScanner(os.Stdin)
+	tmpl := template.Must(template.ParseFiles("authorInfo.html"))
 
-	if scanner.Scan() {
-		buff = scanner.Text()
-	}
-
-	query, err := booksapi.QueryTitle(buff, -1)
-	if err != nil {
-		fmt.Println("Query failed!", err)
-		os.Exit(1)
-	}
-
-	fmt.Println(query)
-
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		mPath := filepath.Base(r.URL.String())
+		url.QueryUnescape(mPath)
+		fmt.Println(mPath)
+		res, err := booksapi.QueryAuthorInformation(mPath)
+		if err != nil || len(res.Docs) == 0 {
+			fmt.Fprintf(w, "<!DOCTYPE html><head><title>404</title></head><body><h1>No info found!</h1></body>")
+			return
+		}
+		res2, err := booksapi.QueryBooksByAuthor(res.Docs[0].Name, 5)
+		if err != nil {
+			fmt.Fprintf(w, "<!DOCTYPE html><head><title>404</title></head><body><h1>No info found!</h1></body>")
+			return
+		}
+		data := PageData{Author: res.Docs[0], Books: res2.Docs}
+		tmpl.Execute(w, data)
+	})
+	http.ListenAndServe(":8080", nil)
 }
