@@ -18,6 +18,7 @@
 	<body>
 		<div id="main">
 			<h1>{{.Author.Name}}</h1>
+			{{/* From the looks of things you cannot actually call functions from text-templates */}}
 			<img src="https://covers.openlibrary.org/a/olid/{{.Author.Key}}-L.jpg">
 			<h3> Books by {{.Author.Name}} </h3>
 			<table style="width:100%;">

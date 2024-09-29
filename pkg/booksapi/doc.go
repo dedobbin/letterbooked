@@ -1,6 +1,6 @@
 
 /*
-Booksapi is a package to make wrangling and interacting with the archive.org openLibrary API
+Booksapi is a package to make wrangling and interacting with the archive.org open Library API
 faster and easier for the server as there's a bunch of boilerplate that is needed to effectively
 get anything from it.
 
