@@ -30,11 +30,10 @@ func featured(w http.ResponseWriter, r *http.Request) {
 		//TODO: better API???
 		query, err := booksapi.QueryTitle(title, 1)
 		if err != nil {
-			//TODO: error type etc
 			w.WriteHeader(http.StatusInternalServerError)
-			error_response := map[string]string{
-				"error": "something went wrong",
-			}
+			error_response := struct {
+				ErrorMsg string `json:"error"`
+			}{ErrorMsg : err.Error()}
 			json.NewEncoder(w).Encode(error_response)
 			return
 		}
