@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- This is some thing for checking if I have a clue how go Text Templates work -->
+<html>
+	<head>
+		<title>Test Page</title>
+		<style>
+		#main {
+			width: 60%;
+			margin:auto;
+			text-align: center;
+		}
+
+		table tr {
+			border 1px sold #000;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<h1>{{.Author.Name}}</h1>
+			{{/* From the looks of things you cannot actually call functions from text-templates */}}
+			<img src="https://covers.openlibrary.org/a/olid/{{.Author.Key}}-L.jpg">
+			<h3> Books by {{.Author.Name}} </h3>
+			<table style="width:100%;">
+				{{range .Books}}
+					<tr>
+						<td><img src="https://covers.openlibrary.org/b/id/{{.CoverIdx}}-M.jpg"></td>
+						<td>{{.Title}}</td>
+					</tr>
+				{{end}}
+			</table>
+		</div>
+	</body>
+</html>

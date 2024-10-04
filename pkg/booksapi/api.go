@@ -33,7 +33,7 @@ func pullFromUrl[T any](url string, v *T) (T, error) {
 func QueryTitle(title string, limit int) (result BookQueryResult, err error) {
 	log.Println("Sending query for title:", title, "to Archive open Library API")
 	params := url.Values{}
-	params.Add("q", url.QueryEscape(title))
+	params.Add("title", url.QueryEscape(title))
 	if limit >= 1 {
 		params.Add("limit", strconv.Itoa(limit))
 	}
@@ -43,7 +43,22 @@ func QueryTitle(title string, limit int) (result BookQueryResult, err error) {
 	return pullFromUrl(queryUrl, &result)
 }
 
-func QueryAuthor(author string) (result AuthorQueryResult, err error) {
+// Query books by an author
+func QueryBooksByAuthor(author string, limit int) (result BookQueryResult, err error) {
+	log.Println("Sending query for books by Author:", author, "to Archive open library API")
+	params := url.Values{}
+	params.Add("author", url.QueryEscape(author))
+	if limit >= 1 {
+		params.Add("limit", strconv.Itoa(limit))
+	}
+
+	queryUrl := "https://openlibrary.org/search.json?" + params.Encode()
+	log.Println("Query string generated:", queryUrl)
+	return pullFromUrl(queryUrl, &result)
+}
+
+// Get Information about some author
+func QueryAuthorInformation(author string) (result AuthorQueryResult, err error) {
 	log.Println("Sending query for author: ", author, "to Archive open Library API")
 	params := url.Values{}
 	params.Add("q", url.QueryEscape(author))
